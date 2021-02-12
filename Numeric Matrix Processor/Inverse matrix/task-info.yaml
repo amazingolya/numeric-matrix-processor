@@ -1,5 +1,5 @@
 type: edu
-custom_name: stage4
+custom_name: stage6
 files:
 - name: src/processor/Main.java
   visible: true
@@ -16,12 +16,13 @@ files:
   visible: false
   text: |
     import org.hyperskill.hstest.stage.StageTest;
-    import processor.Main;
-
     import org.hyperskill.hstest.testcase.CheckResult;
     import org.hyperskill.hstest.testcase.TestCase;
 
-    import java.util.*;
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.List;
+
     import static java.lang.Math.abs;
 
 
@@ -37,10 +38,6 @@ files:
     }
 
     public class NumericMatrixProcessorTest extends StageTest<TestClue> {
-
-        public NumericMatrixProcessorTest() throws Exception {
-            super(Main.class);
-        }
 
         @Override
         public List<TestCase<TestClue>> generate() {
@@ -351,6 +348,69 @@ files:
                             "5 0 0 1\n" +
                             "6 6 7 8.0\n" +
                             "2 4 5 6\n" +
+                            "0"),
+
+                new TestCase<TestClue>()
+                    .setAttach(new TestClue(
+                        "Checking if determinant algorithm is correct",
+                        new Double[]{
+                            31d
+                        }))
+                    .setInput(
+                        "5\n" +
+                            "3 3\n" +
+                            "1 2 3\n" +
+                            "4 5 7\n" +
+                            "10 22 23\n" +
+                            "0"),
+
+                new TestCase<TestClue>()
+                    .setAttach(new TestClue(
+                        "Checking if determinant algorithm is correct",
+                        new Double[]{
+                            45.2197d
+                        }))
+                    .setInput(
+                        "5\n" +
+                            "4 4\n" +
+                            "2.65 3.54 3.88 8.99\n" +
+                            "3.12 5.45 7.77 5.56\n" +
+                            "5.31 2.23 2.33 9.81\n" +
+                            "1.67 1.67 1.01 9.99\n" +
+                            "0"),
+
+                new TestCase<TestClue>()
+                    .setAttach(new TestClue(
+                        "Checking if inversion algorithm is correct",
+                        new Double[]{
+                            1.14717, 2.03717, 2.9711,
+                            2.19055, 4.52055, 7.20788,
+                            3.67009, 0.590087, 1.33819
+                        }))
+                    .setInput(
+                        "6\n" +
+                            "3 3\n" +
+                            "0.396796 -0.214938 0.276735\n" +
+                            "5.19655 -2.06983 -0.388886\n" +
+                            "-3.3797 1.50219 0.159794\n" +
+                            "0"),
+
+                new TestCase<TestClue>()
+                    .setAttach(new TestClue(
+                        "Checking if inversion algorithm is correct",
+                        new Double[]{
+                            0.396796, -0.214938, 0.276735, -0.5092,
+                            5.19655, -2.06983, -0.388886, -3.14252,
+                            -3.3797, 1.50219, 0.159794, 2.04842,
+                            -0.593332, 0.230065, 0.00259267, 0.50345
+                        }))
+                    .setInput(
+                        "6\n" +
+                            "4 4\n" +
+                            "2.65 3.54 3.88 8.99\n" +
+                            "3.12 5.45 7.77 5.56\n" +
+                            "5.31 2.23 2.33 9.81\n" +
+                            "1.67 1.67 1.01 9.99\n" +
                             "0")
             );
         }
@@ -406,6 +466,38 @@ files:
 
     }
   learner_created: false
+- name: src/processor/MatrixTools.java
+  visible: true
+  text: |
+    package processor;
+
+    import java.util.Scanner;
+
+    public class MatrixTools {
+        public static void printMatrix(double[][] matrix) {
+            for (double[] ints : matrix) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int j = 0; j < matrix[0].length; j++) {
+                    stringBuilder.append(ints[j]);
+                    if (j != matrix[0].length - 1) {
+                        stringBuilder.append(" ");
+                    }
+                }
+                System.out.println(stringBuilder);
+            }
+            System.out.println();
+        }
+        public static double[][] readMatrix(int n, int m, Scanner scanner) {
+            double[][] a = new double[n][m];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    a[i][j] = scanner.nextDouble();
+                }
+            }
+            return a;
+        }
+    }
+  learner_created: true
 - name: src/processor/MatrixCalculator.java
   visible: true
   text: |
@@ -455,43 +547,100 @@ files:
             }
             return c;
         }
-    }
-  learner_created: true
-- name: src/processor/MatrixTools.java
-  visible: true
-  text: |
-    package processor;
 
-    import java.util.Scanner;
-
-    public class MatrixTools {
-        public static void printMatrix(double[][] matrix) {
-            for (double[] ints : matrix) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int j = 0; j < matrix[0].length; j++) {
-                    stringBuilder.append(ints[j]);
-                    if (j != matrix[0].length - 1) {
-                        stringBuilder.append(" ");
-                    }
-                }
-                System.out.println(stringBuilder);
-            }
-            System.out.println();
-        }
-        public static double[][] readMatrix(int n, int m, Scanner scanner) {
-            double[][] a = new double[n][m];
+        public double[][] transposeMain(double[][] matrix) {
+            int n = matrix.length;
+            int m = matrix[0].length;
+            double[][] result = new double[n][m];
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
-                    a[i][j] = scanner.nextDouble();
+                    result[i][j] = matrix[j][i];
                 }
             }
-            return a;
+            return result;
+        }
+
+        public double[][] transposeSide(double[][] matrix) {
+            int n = matrix.length - 1;
+            int m = matrix[0].length - 1;
+            double[][] result = new double[n + 1][m + 1];
+            for (int i = 0; i <= n; i++) {
+                for (int j = 0; j <= m; j++) {
+                    result[i][j] = matrix[n - j][m - i];
+                }
+            }
+            return result;
+        }
+
+        public double[][] transposeVertical(double[][] matrix) {
+            int n = matrix.length - 1;
+            int m = matrix[0].length - 1;
+            for (int x = 0; x <= n; x++) {
+                for (int y = 0; y <= m / 2; y++) {
+                    swap(x, y, x, m - y, matrix);
+                }
+            }
+            return matrix;
+        }
+
+        public double[][] transposeHorizontal(double[][] matrix) {
+            int n = matrix.length - 1;
+            for (int x = 0; x <= n / 2; x++) {
+                double[] temp = matrix[x];
+                matrix[x] = matrix[n - x];
+                matrix[n - x] = temp;
+            }
+            return matrix;
+        }
+
+        private void swap(int x1, int y1, int x2, int y2, double[][] matrix) {
+            double temp = matrix[x1][y1];
+            matrix[x1][y1] = matrix[x2][y2];
+            matrix[x2][y2] = temp;
+        }
+
+        public double findDeterminant(double[][] matrix) {
+            return findDeterminant(matrix, 0, matrix.length);
+        }
+
+        public double findDeterminant(double[][] matrix, int start, int finish) {
+            int m = matrix.length;
+            if (m == 1) {
+                return matrix[0][0];
+            }
+            if (m == 2) {
+                return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            }
+            double determinant = 0;
+            for (int i = 0; i < m; i++) {
+                int sign = (i) % 2 == 0 ? 1 : -1;
+                determinant += matrix[0][i] * sign * findDeterminant(getMatrix(i, matrix));
+            }
+            return determinant;
+        }
+
+        private double[][] getMatrix(int j, double[][] matrix) {
+            double[][] newMatrix = new double[matrix.length - 1][matrix.length - 1];
+            for (int i = 1; i < matrix.length; i++) {
+                for (int k = 0; k < j ; k++) {
+                    newMatrix[i - 1][k] = matrix[i][k];
+                }
+            }
+            for (int i = 1; i < matrix.length; i++) {
+                for (int k = j + 1; k < matrix.length; k++) {
+                    newMatrix[i - 1][k - 1] = matrix[i][k];
+                }
+            }
+            return newMatrix;
         }
     }
   learner_created: true
-feedback_link: https://hyperskill.org/projects/60/stages/326/implement#comment
+- name: src/processor/Matrix.java
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/60/stages/328/implement#comment
 status: Solved
 feedback:
   message: Congratulations!
-  time: Fri, 22 Jan 2021 19:40:31 UTC
-record: 4
+  time: Fri, 12 Feb 2021 12:42:59 UTC
+record: -1

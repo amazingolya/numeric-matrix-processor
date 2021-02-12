@@ -3,12 +3,13 @@ package processor;
 import java.util.Scanner;
 
 public class MatrixTools {
-    public static void printMatrix(double[][] matrix) {
-        for (double[] doubles : matrix) {
+    public static void printMatrix(Matrix matrix) {
+        for (int i = 0; i < matrix.getRows(); i++) {
             StringBuilder stringBuilder = new StringBuilder();
-            for (int j = 0; j < matrix[0].length; j++) {
-                stringBuilder.append(String.format("%.2f", doubles[j]));
-                if (j != matrix[0].length - 1) {
+            double[] row = matrix.getRow(i);
+            for (int j = 0; j < row.length; j++) {
+                stringBuilder.append(String.format("%.2f", row[j]));
+                if (j != row.length - 1) {
                     stringBuilder.append(" ");
                 }
             }
@@ -16,13 +17,13 @@ public class MatrixTools {
         }
         System.out.println();
     }
-    public static double[][] readMatrix(int n, int m, Scanner scanner) {
-        double[][] a = new double[n][m];
+    public static Matrix readMatrix(int n, int m, Scanner scanner) {
+        Matrix matrix = new Matrix(n, m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                a[i][j] = scanner.nextDouble();
+                matrix.setValue(i, j, scanner.nextDouble());
             }
         }
-        return a;
+        return matrix;
     }
 }

@@ -1,5 +1,5 @@
 type: edu
-custom_name: stage4
+custom_name: stage3
 files:
 - name: src/processor/Main.java
   visible: true
@@ -21,6 +21,7 @@ files:
     import org.hyperskill.hstest.testcase.CheckResult;
     import org.hyperskill.hstest.testcase.TestCase;
 
+
     import java.util.*;
     import static java.lang.Math.abs;
 
@@ -38,7 +39,7 @@ files:
 
     public class NumericMatrixProcessorTest extends StageTest<TestClue> {
 
-        public NumericMatrixProcessorTest() throws Exception {
+        public NumericMatrixProcessorTest() {
             super(Main.class);
         }
 
@@ -245,112 +246,6 @@ files:
                             "6 0\n" +
                             "0 9\n" +
                             "7 7\n" +
-                            "0"),
-
-                new TestCase<TestClue>()
-                    .setAttach(new TestClue(
-                        "Checking if diagonal transposition algorithm is correct",
-                        new Double[]{
-                            1d, 6d, 4d,
-                            7d, 6d, 2d,
-                            7d, 4d, 1d,
-                        }))
-                    .setInput(
-                        "4\n" +
-                            "1\n" +
-                            "3 3\n" +
-                            "1 7 7\n" +
-                            "6 6 4\n" +
-                            "4 2 1\n" +
-                            "0"),
-
-                new TestCase<TestClue>()
-                    .setAttach(new TestClue(
-                        "Checking if diagonal transposition algorithm is correct",
-                        new Double[]{
-                            1d, 6d, 4d,
-                            7d, 6d, 5d,
-                            7d, 4d, 1d,
-                        }))
-                    .setInput(
-                        "4\n" +
-                            "1\n" +
-                            "3 3\n" +
-                            "1 7 7\n" +
-                            "6 6 4\n" +
-                            "4 5 1\n" +
-                            "0"),
-
-                new TestCase<TestClue>()
-                    .setAttach(new TestClue(
-                        "Checking if diagonal transposition algorithm is correct",
-                        new Double[]{
-                            1d, 6d, 4d,
-                            7d, 6d, 2d,
-                            7d, 4d, 1d,
-                        }))
-                    .setInput(
-                        "4\n" +
-                            "2\n" +
-                            "3 3\n" +
-                            "1 2 4\n" +
-                            "4 6 6\n" +
-                            "7 7 1\n" +
-                            "0"),
-
-                new TestCase<TestClue>()
-                    .setAttach(new TestClue(
-                        "Checking if diagonal transposition algorithm is correct",
-                        new Double[]{
-                            1d, 6d, 4d,
-                            7d, 6d, 5d,
-                            7d, 4d, 1d,
-                        }))
-                    .setInput(
-                        "4\n" +
-                            "2\n" +
-                            "3 3\n" +
-                            "1 5 4\n" +
-                            "4 6 6\n" +
-                            "7 7 1.0\n" +
-                            "0"),
-
-                new TestCase<TestClue>()
-                    .setAttach(new TestClue(
-                        "Checking if transposition algorithm is correct",
-                        new Double[]{
-                            2d, 4d, 5d, 6d,
-                            6d, 6d, 7d, 8d,
-                            5d, 0d, 0d, 1d,
-                            8d, 8d, 2d, 9d
-                        }))
-                    .setInput(
-                        "4\n" +
-                            "3\n" +
-                            "4 4\n" +
-                            "6 5 4 2\n" +
-                            "8 7 6 6\n" +
-                            "1 0 0 5.0\n" +
-                            "9 2 8 8\n" +
-                            "0"),
-
-                new TestCase<TestClue>()
-                    .setAttach(new TestClue(
-                        "Checking if transposition algorithm is correct",
-                        new Double[]{
-                            2d, 4d, 5d, 6d,
-                            6d, 6d, 7d, 8d,
-                            5d, 0d, 0d, 1d,
-                            8d, 8d, 2d, 9d
-                        }))
-                    .setInput(
-                        "4\n" +
-                            "4\n" +
-                            "4 4\n" +
-                            "8 8 2 9\n" +
-                            "5 0 0 1\n" +
-                            "6 6 7 8.0\n" +
-                            "2 4 5 6\n" +
                             "0")
             );
         }
@@ -412,13 +307,10 @@ files:
     package processor;
 
     public class Calculator {
-        public double[][] sum(double[][] a, double[][] b) {
+        public int[][] sum(int[][] a, int [][] b) {
             int n = a.length;
             int m = a[0].length;
-            if (n != b.length || m != b[0].length) {
-                return null;
-            }
-            double[][] c = new double[n][m];
+            int[][] c = new int[n][m];
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
                     c[i][j] = a[i][j] + b[i][j];
@@ -426,8 +318,7 @@ files:
             }
             return c;
         }
-
-        public double[][] multiplyByNumber(double[][] matrix, double n) {
+        public int[][] multiply(int[][] matrix, int n) {
             for (int i = 0; i < matrix.length; i++) {
                 for (int j = 0; j < matrix[0].length; j++) {
                     matrix[i][j] *= n;
@@ -435,63 +326,14 @@ files:
             }
             return matrix;
         }
-
-        public double[][] multiply(double[][] a, double[][] b) {
-            int n = a.length;
-            int k = a[0].length;
-            int m = b[0].length;
-            if (k != b.length) {
-                return null;
-            }
-            double[][] c = new double[n][m];
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    double temp = 0;
-                    for (int o = 0; o < k; o++) {
-                        temp += a[i][o] * b[o][j];
-                    }
-                    c[i][j] = temp;
-                }
-            }
-            return c;
-        }
     }
   learner_created: true
 - name: src/processor/MatrixTools.java
   visible: true
-  text: |
-    package processor;
-
-    import java.util.Scanner;
-
-    public class MatrixTools {
-        public static void printMatrix(double[][] matrix) {
-            for (double[] ints : matrix) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int j = 0; j < matrix[0].length; j++) {
-                    stringBuilder.append(ints[j]);
-                    if (j != matrix[0].length - 1) {
-                        stringBuilder.append(" ");
-                    }
-                }
-                System.out.println(stringBuilder);
-            }
-            System.out.println();
-        }
-        public static double[][] readMatrix(int n, int m, Scanner scanner) {
-            double[][] a = new double[n][m];
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    a[i][j] = scanner.nextDouble();
-                }
-            }
-            return a;
-        }
-    }
   learner_created: true
-feedback_link: https://hyperskill.org/projects/60/stages/326/implement#comment
+feedback_link: https://hyperskill.org/projects/60/stages/325/implement#comment
 status: Solved
 feedback:
   message: Congratulations!
-  time: Fri, 22 Jan 2021 19:40:31 UTC
-record: 4
+  time: Thu, 21 Jan 2021 20:18:23 UTC
+record: 3

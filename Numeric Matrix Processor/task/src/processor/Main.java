@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Calculator calculator = new Calculator();
+        MatrixCalculator calculator = new MatrixCalculator();
         boolean reading = true;
 
         while (reading) {
@@ -55,22 +55,22 @@ public class Main {
         System.out.print("Your choice: > ");
     }
 
-    private static void addMatrices(Scanner scanner, Calculator calculator) {
+    private static void addMatrices(Scanner scanner, MatrixCalculator calculator) {
         System.out.print("Enter size of first matrix: > ");
         int n = scanner.nextInt();
         int m = scanner.nextInt();
 
         System.out.println("Enter first matrix:");
-        double[][] a = MatrixTools.readMatrix(n, m, scanner);
+        Matrix a = MatrixTools.readMatrix(n, m, scanner);
 
         System.out.print("Enter size of second matrix: > ");
         int k = scanner.nextInt();
         int l = scanner.nextInt();
 
         System.out.println("Enter second matrix:");
-        double[][] b = MatrixTools.readMatrix(k, l, scanner);
+        Matrix b = MatrixTools.readMatrix(k, l, scanner);
 
-        double[][] result = calculator.sum(a, b);
+        Matrix result = calculator.sum(a, b);
 
         if (result == null) {
             System.out.println("The operation cannot be performed.");
@@ -80,13 +80,13 @@ public class Main {
         }
     }
 
-    private static void multiplyMatrixByConstant(Scanner scanner, Calculator calculator) {
+    private static void multiplyMatrixByConstant(Scanner scanner, MatrixCalculator calculator) {
         System.out.print("Enter size of matrix: > ");
         int n = scanner.nextInt();
         int m = scanner.nextInt();
 
         System.out.println("Enter matrix:");
-        double[][] a = MatrixTools.readMatrix(n, m, scanner);
+        Matrix a = MatrixTools.readMatrix(n, m, scanner);
 
         System.out.print("Enter constant: > ");
         double k = scanner.nextInt();
@@ -95,22 +95,22 @@ public class Main {
         MatrixTools.printMatrix(calculator.multiplyByNumber(a, k));
     }
 
-    private static void multiplyMatrices(Scanner scanner, Calculator calculator) {
+    private static void multiplyMatrices(Scanner scanner, MatrixCalculator calculator) {
         System.out.print("Enter size of first matrix: > ");
         int n = scanner.nextInt();
         int m = scanner.nextInt();
 
         System.out.println("Enter first matrix:");
-        double[][] a = MatrixTools.readMatrix(n, m, scanner);
+        Matrix a = MatrixTools.readMatrix(n, m, scanner);
 
         System.out.print("Enter size of second matrix: > ");
         int k = scanner.nextInt();
         int l = scanner.nextInt();
 
         System.out.println("Enter second matrix:");
-        double[][] b = MatrixTools.readMatrix(k, l, scanner);
+        Matrix b = MatrixTools.readMatrix(k, l, scanner);
 
-        double[][] result = calculator.multiply(a, b);
+        Matrix result = calculator.multiply(a, b);
 
         if (result == null) {
             System.out.println("The operation cannot be performed.");
@@ -120,7 +120,7 @@ public class Main {
         }
     }
 
-    private static void transposeMatrix(Scanner scanner, Calculator calculator) {
+    private static void transposeMatrix(Scanner scanner, MatrixCalculator calculator) {
         System.out.println("1. Main diagonal");
         System.out.println("2. Side diagonal");
         System.out.println("3. Vertical line");
@@ -134,7 +134,7 @@ public class Main {
         int m = scanner.nextInt();
 
         System.out.println("Enter matrix:");
-        double[][] a = MatrixTools.readMatrix(n, m, scanner);
+        Matrix a = MatrixTools.readMatrix(n, m, scanner);
 
         System.out.println("The result is:");
         switch (choice) {
@@ -157,26 +157,26 @@ public class Main {
         }
     }
 
-    private static void findDeterminant(Scanner scanner, Calculator calculator) {
+    private static void findDeterminant(Scanner scanner, MatrixCalculator calculator) {
         System.out.print("Enter size of matrix: > ");
         int n = scanner.nextInt();
         int m = scanner.nextInt();
 
         System.out.println("Enter matrix:");
-        double[][] a = MatrixTools.readMatrix(n, m, scanner);
+        Matrix a = MatrixTools.readMatrix(n, m, scanner);
 
         System.out.println("The result is:");
         System.out.println(calculator.findDeterminant(a));
     }
 
-    private static void inverseMatrix(Scanner scanner, Calculator calculator) {
+    private static void inverseMatrix(Scanner scanner, MatrixCalculator calculator) {
         System.out.print("Enter size of matrix: > ");
         int n = scanner.nextInt();
         int m = scanner.nextInt();
 
         System.out.println("Enter matrix:");
-        double[][] a = MatrixTools.readMatrix(n, m, scanner);
-        double[][] inverseMatrix = calculator.inverseMatrix(a);
+        Matrix a = MatrixTools.readMatrix(n, m, scanner);
+        Matrix inverseMatrix = calculator.inverseMatrix(a);
         if (inverseMatrix == null) {
             System.out.println("This matrix doesn't have an inverse.");
         } else {
